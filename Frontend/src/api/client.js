@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
+const defaultApiUrl = "https://task1-5peo.vercel.app/api/v1";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1"
+  baseURL: import.meta.env.VITE_API_URL || defaultApiUrl
 });
 
 api.interceptors.request.use((config) => {
