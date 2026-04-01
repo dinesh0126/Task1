@@ -20,17 +20,6 @@ function FeedPage() {
 
   return (
     <div className="feed-layout">
-      <section className="hero-card">
-        <div>
-          <span className="badge">Community Feed</span>
-          <h1>Share updates, spot useful work, and jump into live discussion.</h1>
-          <p>
-            Create a post, like what others share, and keep comments in sync instantly
-            with Zustand state.
-          </p>
-        </div>
-      </section>
-
       <PostComposer />
 
       {feedError && <div className="status-card error-card">{feedError}</div>}
