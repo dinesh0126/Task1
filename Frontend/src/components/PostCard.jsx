@@ -4,66 +4,72 @@ import CommentSection from "./CommentSection";
 
 function PostCard({ post }) {
   const currentUser = useAuthStore((state) => state.user);
+  const livePost = usePostStore((state) =>
+    state.posts.find((storedPost) => storedPost.id === post.id)
+  );
   const toggleLike = usePostStore((state) => state.toggleLike);
   const deletePost = usePostStore((state) => state.deletePost);
+  const activePost = livePost || post;
 
   return (
     <article className="post-card">
       <div className="post-card-header">
         <div className="post-author">
-          {post.author.profileImage ? (
+          {activePost.author.profileImage ? (
             <img
-              alt={post.author.name}
+              alt={activePost.author.name}
               className="avatar"
-              src={post.author.profileImage}
+              src={activePost.author.profileImage}
             />
           ) : (
             <div className="avatar avatar-fallback">
-              {post.author.name?.charAt(0).toUpperCase()}
+              {activePost.author.name?.charAt(0).toUpperCase()}
             </div>
           )}
           <div>
-            <h3>{post.author.name}</h3>
-            <p>{new Date(post.createdAt).toLocaleString()}</p>
+            <h3>{activePost.author.name}</h3>
+            <p>{new Date(activePost.createdAt).toLocaleString()}</p>
           </div>
         </div>
-        {currentUser?.id === post.author.id && (
-          <button className="text-button" onClick={() => deletePost(post.id)} type="button">
+        {currentUser?.id === activePost.author.id && (
+          <button className="text-button" onClick={() => deletePost(activePost.id)} type="button">
             Delete
           </button>
         )}
       </div>
 
-      {post.text && <p className="post-text">{post.text}</p>}
+      {activePost.text && <p className="post-text">{activePost.text}</p>}
 
-      {post.imageUrl && (
+      {activePost.imageUrl && (
         <img
-          alt={`${post.author.name}'s post`}
+          alt={`${activePost.author.name}'s post`}
           className="post-image"
-          src={post.imageUrl}
+          src={activePost.imageUrl}
         />
       )}
 
       <div className="post-meta">
-        <span>{post.likesCount} likes</span>
-        <span>{post.commentsCount} comments</span>
+        <span>{activePost.likesCount} likes</span>
+        <span>{activePost.commentsCount} comments</span>
       </div>
 
-      {post.likesCount > 0 && (
-        <p className="muted-text">Liked by: {post.likes.map((like) => like.username).join(", ")}</p>
+      {activePost.likesCount > 0 && (
+        <p className="muted-text">
+          Liked by: {activePost.likes.map((like) => like.username).join(", ")}
+        </p>
       )}
 
       <div className="post-actions">
         <button
-          className={post.isLikedByCurrentUser ? "primary-button" : "secondary-button"}
-          onClick={() => toggleLike(post.id)}
+          className={activePost.isLikedByCurrentUser ? "primary-button" : "secondary-button"}
+          onClick={() => toggleLike(activePost.id)}
           type="button"
         >
-          {post.isLikedByCurrentUser ? "Unlike" : "Like"}
+          {activePost.isLikedByCurrentUser ? "Unlike" : "Like"}
         </button>
       </div>
 
-      <CommentSection post={post} />
+      <CommentSection postId={activePost.id} />
     </article>
   );
 }

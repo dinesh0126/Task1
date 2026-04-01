@@ -22,8 +22,8 @@ function FeedPage() {
     <div className="feed-layout">
       <section className="hero-card">
         <div>
-          <span className="badge">Mini Social Feed</span>
-          <h1>Share updates with a clean, task-focused community UI.</h1>
+          <span className="badge">Community Feed</span>
+          <h1>Share updates, spot useful work, and jump into live discussion.</h1>
           <p>
             Create a post, like what others share, and keep comments in sync instantly
             with Zustand state.

@@ -2,11 +2,18 @@ import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { usePostStore } from "../store/postStore";
 
-function CommentSection({ post }) {
+function CommentSection({ postId }) {
   const [commentText, setCommentText] = useState("");
   const currentUser = useAuthStore((state) => state.user);
+  const post = usePostStore((state) =>
+    state.posts.find((storedPost) => storedPost.id === postId)
+  );
   const addComment = usePostStore((state) => state.addComment);
   const deleteComment = usePostStore((state) => state.deleteComment);
+
+  if (!post) {
+    return null;
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

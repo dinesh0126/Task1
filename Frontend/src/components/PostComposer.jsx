@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAuthStore } from "../store/authStore";
 import { usePostStore } from "../store/postStore";
 
 const postSchema = z
@@ -14,6 +15,7 @@ const postSchema = z
   });
 
 function PostComposer() {
+  const currentUser = useAuthStore((state) => state.user);
   const createPost = usePostStore((state) => state.createPost);
   const isSubmittingPost = usePostStore((state) => state.isSubmittingPost);
   const {
@@ -41,18 +43,38 @@ function PostComposer() {
   };
 
   return (
-    <section className="panel">
-      <div className="panel-header">
-        <h2>Create Post</h2>
-        <p>Text, image URL, or both.</p>
+    <section className="panel composer-panel">
+      <div className="panel-header composer-header">
+        <div>
+          <span className="badge composer-badge">Share your post</span>
+          <h2>Drop a quick update for the community</h2>
+          <p>Share what you finished, what you learned, or what others should see.</p>
+        </div>
+        <div className="composer-user">
+          {currentUser?.profileImage ? (
+            <img
+              alt={currentUser.name}
+              className="avatar"
+              src={currentUser.profileImage}
+            />
+          ) : (
+            <div className="avatar avatar-fallback">
+              {currentUser?.name?.charAt(0).toUpperCase() || "Y"}
+            </div>
+          )}
+          <div>
+            <strong>{currentUser?.name || "You"}</strong>
+            <p>Say something useful and keep it easy to scan.</p>
+          </div>
+        </div>
       </div>
 
       <form className="form-stack" onSubmit={handleSubmit(onSubmit)}>
         <label className="field-group">
-          <span>Post Text</span>
+          <span>Post text</span>
           <textarea
-            rows="4"
-            placeholder="Share an update with everyone..."
+            rows="5"
+            placeholder="Share your post type update here..."
             {...register("text")}
           />
           {errors.text && <small className="field-error">{errors.text.message}</small>}
@@ -61,7 +83,7 @@ function PostComposer() {
         <label className="field-group">
           <span>Image URL</span>
           <input
-            placeholder="https://example.com/image.jpg"
+            placeholder="Paste an image link if this update needs a visual"
             type="url"
             {...register("imageUrl")}
           />
@@ -70,9 +92,12 @@ function PostComposer() {
           )}
         </label>
 
-        <button className="primary-button" disabled={isSubmittingPost} type="submit">
-          {isSubmittingPost ? "Posting..." : "Publish Post"}
-        </button>
+        <div className="composer-actions">
+          <p className="muted-text">Text-only posts work great too.</p>
+          <button className="primary-button" disabled={isSubmittingPost} type="submit">
+            {isSubmittingPost ? "Posting..." : "Share post"}
+          </button>
+        </div>
       </form>
     </section>
   );

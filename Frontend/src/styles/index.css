@@ -208,6 +208,13 @@ button {
   color: #667085;
 }
 
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .form-stack {
   display: grid;
   gap: 16px;
@@ -237,6 +244,7 @@ button {
 
 .field-group textarea {
   resize: vertical;
+  min-height: 132px;
 }
 
 .field-group input:focus,
@@ -279,6 +287,42 @@ button {
     rgba(255, 255, 255, 0.92);
 }
 
+.composer-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 236, 0.96)),
+    rgba(255, 255, 255, 0.92);
+}
+
+.composer-header {
+  padding-bottom: 4px;
+}
+
+.composer-badge {
+  margin-bottom: 12px;
+}
+
+.composer-user {
+  min-width: 230px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(217, 119, 6, 0.1);
+}
+
+.composer-user strong {
+  display: block;
+  color: #101828;
+}
+
+.composer-user p {
+  margin: 4px 0 0;
+  color: #667085;
+  font-size: 0.92rem;
+}
+
 .badge {
   display: inline-flex;
   width: fit-content;
@@ -295,6 +339,13 @@ button {
 .feed-list {
   display: grid;
   gap: 18px;
+}
+
+.composer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .post-card {
@@ -382,12 +433,18 @@ button {
 
   .topbar,
   .topbar-actions,
+  .panel-header,
+  .composer-actions,
   .post-card-header,
   .post-meta,
   .comment-form,
   .pagination {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .composer-user {
+    min-width: 0;
   }
 
   .welcome-text {
