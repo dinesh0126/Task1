@@ -10,6 +10,17 @@ export const usePostStore = create((set, get) => ({
   isSubmittingPost: false,
   feedError: "",
 
+  updatePostInState: (postId, updater) =>
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id !== postId) {
+          return post;
+        }
+
+        return typeof updater === "function" ? updater(post) : updater;
+      })
+    })),
+
   fetchFeed: async (page = 1) => {
     set({ isFeedLoading: true, feedError: "" });
     try {
@@ -47,11 +58,7 @@ export const usePostStore = create((set, get) => ({
   toggleLike: async (postId) => {
     try {
       const response = await api.patch(`/posts/${postId}/like`);
-      set((state) => ({
-        posts: state.posts.map((post) =>
-          post.id === postId ? response.data.data.post : post
-        )
-      }));
+      get().updatePostInState(postId, response.data.data.post);
     } catch (error) {
       set({
         feedError: error.response?.data?.message || "Unable to update like"
@@ -62,11 +69,7 @@ export const usePostStore = create((set, get) => ({
   addComment: async (postId, text) => {
     try {
       const response = await api.post(`/posts/${postId}/comments`, { text });
-      set((state) => ({
-        posts: state.posts.map((post) =>
-          post.id === postId ? response.data.data.post : post
-        )
-      }));
+      get().updatePostInState(postId, response.data.data.post);
       return { success: true };
     } catch (error) {
       const message = error.response?.data?.message || "Unable to add comment";
@@ -78,11 +81,7 @@ export const usePostStore = create((set, get) => ({
   deleteComment: async (postId, commentId) => {
     try {
       const response = await api.delete(`/posts/${postId}/comments/${commentId}`);
-      set((state) => ({
-        posts: state.posts.map((post) =>
-          post.id === postId ? response.data.data.post : post
-        )
-      }));
+      get().updatePostInState(postId, response.data.data.post);
     } catch (error) {
       set({
         feedError: error.response?.data?.message || "Unable to delete comment"
