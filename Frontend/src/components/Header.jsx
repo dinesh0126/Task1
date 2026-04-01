@@ -18,7 +18,7 @@ function Header() {
         <Link className="brand" to={user ? "/feed" : "/"}>
           TaskPlanet Social
         </Link>
-        <p className="topbar-subtitle">Clean MERN feed with Zustand state</p>
+        
       </div>
 
       <nav className="topbar-actions">
